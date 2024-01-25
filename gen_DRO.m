@@ -9,7 +9,11 @@ par_var_t = 0.2;
 t = linspace(0,150,22);
 
 mask_ = data{idx}.mask;
-aif = data{idx}.AIF;
+if ~isfield(option,'AIF')
+    aif = data{idx}.AIF;
+else
+    aif = option.AIF;
+end
 S0 = data{idx}.S0;
 % ID = data{idx}.ID;
 smap = double(data{idx}.smap);
