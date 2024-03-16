@@ -1,8 +1,8 @@
-function [simImg,mask,parMap,smap,S0,ID,aif,T10] = gen_DRO(data,option)
+function [simImg,mask,parMap,smap,S0,aif,T10] = gen_DRO(data,option)
 
 
-idx = round(length(data)*rand());
-% idx = 12;
+% idx = round(length(data)*rand());
+idx = 12;
 
 par_var = 0.1;
 par_var_t = 0.2;
@@ -78,8 +78,8 @@ T1.glandular = 1.324;
 T1.malignant = 1.5;
 T1.benign = 1.4;
 T1.liver = 0.81;
-% T1.heart = 1.68;
-T1.heart = 0.81;
+T1.heart = 1.68;
+% T1.heart = 0.81;
 T1.muscle = 1.41;
 T1.skin = 0.85; %Check
 % T1.skin = 1;
@@ -111,7 +111,7 @@ p0.skin = [0,0; 0.039,0.125; 0.1/60,0.151/60; 0.01/60,0.019/60];
 
 p0.liver = [0.1,0.5;0.353,0.5;0.433/60,1.227/60;1.990/60,2/60];
 p0.heart = [0.148,0.300;0.214,0.373;2/60,2/60;0.404/60,1.224/60];
-p0.vascular = [0,0;0.3,0.3;2/60,2/60;0/60,0/60];
+p0.vascular = [0,0;0.4,0.4;2/60,2/60;0/60,0/60];
 
 gland_ktrans = [0.01,0.0352]./60;
 malig_ktrans = [0.0412,0.385]./60;
@@ -204,17 +204,18 @@ end
 end
 
 aifci_1s = zeros(nx,ny,length(t_1s));
-[rIdx,cIdx] = find(mask.liver==1); %10s delay
-for i = 1:length(rIdx)
-    aifci_1s(rIdx(i),cIdx(i),:) = aifci([1:10,1:end-10]);
-end
+% [rIdx,cIdx] = find(mask.liver==1); %10s delay
+% for i = 1:length(rIdx)
+%     aifci_1s(rIdx(i),cIdx(i),:) = aifci([1:10,1:end-10]);
+% end
 
 [rIdx,cIdx] = find(mask.glandular==1);%15s delay
 for i = 1:length(rIdx)
     aifci_1s(rIdx(i),cIdx(i),:) = aifci([1:15,1:end-15]);
 end
 
-[rIdx,cIdx] = find((mask.vascular|mask.heart)==1); %0s delay
+% [rIdx,cIdx] = find((mask.vascular|mask.heart)==1); %0s delay
+[rIdx,cIdx] = find((mask.vascular)==1); %0s delay
 for i = 1:length(rIdx)
     aifci_1s(rIdx(i),cIdx(i),:) = aifci;
 end
